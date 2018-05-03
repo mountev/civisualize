@@ -1,4 +1,9 @@
 {crmTitle string="Case Overview"}
+{assign var="userID" value=$session->get('userID')}
+<div class="crm-case-dashboard-switch-view-buttons">
+  <div><input name="allupcoming" {if $id}checked{/if} type="radio" class="radio" onClick='window.location.replace("{crmURL p="civicrm/dataviz/cases/1"}")' value="1"><span>{ts}All Cases with Upcoming Activities{/ts}</span></input></div>
+  <div><input name="allupcoming" {if !$id}checked{/if} type="radio" class="radio" onClick='window.location.replace("{crmURL p="civicrm/dataviz/cases/0"}")' value="0"><span>{ts}My Cases with Upcoming Activities{/ts}</span></input></div>
+</div>
 <div class="caseoverview">
     <div id="case-manager" class="clear">
         <strong>Case Manager</strong>
@@ -37,7 +42,7 @@
 
 <script>
   'use strict';
-   var data             = {crmSQL file="cases"};
+   var data             = {if $id}{crmSQL file="casesAll"}{else}{crmSQL json="casesMy" id=$userID}{/if};
    var statusOptionVal  = {crmAPI entity="OptionValue" option_group_id="case_status"};
    var caseURL          = "{crmURL p='civicrm/contact/view/case?reset=1&id=xx&cid=yy&action=view&context=dashboard&selectedChild=case'}";
    var contactURL       = "{crmURL p='civicrm/contact/view?reset=1&cid=xx'}";
